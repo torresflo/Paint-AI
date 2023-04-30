@@ -1,6 +1,8 @@
 from PySide6 import QtCore, QtWidgets, QtGui
 
 class QPaintWidget(QtWidgets.QWidget):
+    onDrawImageChanged = QtCore.Signal()
+
     def __init__(self, parent=None):
         super().__init__(parent)
 
@@ -36,6 +38,7 @@ class QPaintWidget(QtWidgets.QWidget):
         if(event.button() == QtCore.Qt.MouseButton.LeftButton and self.m_drawing):
             self.drawLineTo(event.pos())
             self.m_drawing = False
+            self.onDrawImageChanged.emit()
         else:
             return super().mouseReleaseEvent(event)
         
