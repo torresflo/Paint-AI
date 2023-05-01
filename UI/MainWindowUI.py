@@ -84,6 +84,7 @@ class MainWindowUI(QtWidgets.QWidget):
         self.updatePenColorLabel()
         self.m_fillPushButton = QtWidgets.QPushButton("Fill")
         self.m_fillPushButton.setCheckable(True)
+        self.m_fillPushButton.clicked.connect(self.m_paintWidget.setFillMode)
 
         # Drawing options layout
         self.m_drawingOptionsLayout = QtWidgets.QHBoxLayout()

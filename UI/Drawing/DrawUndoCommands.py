@@ -13,6 +13,8 @@ class DrawUndoCommand(QtGui.QUndoCommand):
 
     def undo(self):
         self.m_paintWidget.drawImage(self.m_drawPosition, self.m_previousImage)
+        self.m_paintWidget.onDrawImageChanged.emit()
 
     def redo(self):
         self.m_paintWidget.drawImage(self.m_drawPosition, self.m_drawingImage)
+        self.m_paintWidget.onDrawImageChanged.emit()
