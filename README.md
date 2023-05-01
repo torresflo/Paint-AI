@@ -7,7 +7,10 @@
   <h1 align="center">Paint AI</h3>
 
   <p align="center">
+    When Paint meets Artificial Intelligence!
+    <br/>
     A Python application to generate pictures based on your drawing.
+    <br/>
     Based on <a href="https://github.com/CompVis/stable-diffusion">Stable Diffusion</a>.
     <br />
     <a href="https://github.com/torresflo/Paint-AI/issues">Report a bug or request a feature</a>
