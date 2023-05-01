@@ -54,7 +54,7 @@ All generated images have a size of 512x512 pixels.
 
 Here is a small video demonstrating how it works:
 
-<video src='https://github.com/torresflo/Paint-AI/raw/main/Examples/DemoPaintAI.mp4' width=800></video>
+![Demo video](https://user-images.githubusercontent.com/50424335/235513123-df814213-ffc1-45da-be12-2cd4e87f596e.mp4)
 
 ### Available parameters ###
 
