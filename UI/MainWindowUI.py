@@ -5,6 +5,7 @@ from Model.ImageGenerator import PretrainedModelName
 from UI.QClickableLabel import QClickableLabel
 from UI.QGeneratedImageLabel import QGeneratedImageLabel
 from UI.Drawing.QPaintWidget import QPaintWidget
+from UI.Drawing.QPaintOptionsWidget import QPaintOptionsWidget
 
 class MainWindowUI(QtWidgets.QWidget):
     onAnyParameterChangedSignal = QtCore.Signal()
@@ -73,25 +74,15 @@ class MainWindowUI(QtWidgets.QWidget):
         self.m_imageLayout.addWidget(self.m_paintWidget)
 
         # Drawing options
-        self.m_penWidthSlider = QtWidgets.QSlider(QtCore.Qt.Orientation.Horizontal)
-        self.m_penWidthSlider.setMaximumWidth(100)
-        self.m_penWidthSlider.setRange(1, 100)
-        self.m_penWidthSlider.setValue(self.m_paintWidget.m_penWidth)
-        self.m_penWidthSlider.valueChanged.connect(self.onPenWidthSliderValueChanged)
-        self.m_penColorLabel = QClickableLabel()
-        self.m_penColorLabel.setFixedSize(30, 30)
-        self.m_penColorLabel.mouseLeftButtonClickedSignal.connect(self.onPenColorLabelClicked)
-        self.updatePenColorLabel()
-        self.m_fillPushButton = QtWidgets.QPushButton("Fill")
-        self.m_fillPushButton.setCheckable(True)
-        self.m_fillPushButton.clicked.connect(self.m_paintWidget.setFillMode)
+        self.m_paintOptionsWidget = QPaintOptionsWidget()
+        self.m_paintOptionsWidget.onSelectedFillModeChangedSignal.connect(self.m_paintWidget.setFillMode)
+        self.m_paintOptionsWidget.onSelectedWidthChangedSignal.connect(self.m_paintWidget.setPenWidth)
+        self.m_paintOptionsWidget.onSelectedColorChangedSignal.connect(self.m_paintWidget.setPenColor)
 
         # Drawing options layout
         self.m_drawingOptionsLayout = QtWidgets.QHBoxLayout()
         self.m_drawingOptionsLayout.addStretch()
-        self.m_drawingOptionsLayout.addWidget(self.m_penWidthSlider)
-        self.m_drawingOptionsLayout.addWidget(self.m_penColorLabel)
-        self.m_drawingOptionsLayout.addWidget(self.m_fillPushButton)
+        self.m_drawingOptionsLayout.addWidget(self.m_paintOptionsWidget)
         self.m_drawingOptionsLayout.addStretch()
 
         # Main Layout
@@ -117,21 +108,8 @@ class MainWindowUI(QtWidgets.QWidget):
         self.addAction(self.m_redoAction)
         self.m_paintWidget.setFocus()
 
-    def updatePenColorLabel(self):
-        palette = self.m_penColorLabel.palette()
-        palette.setColor(self.m_penColorLabel.backgroundRole(), self.m_paintWidget.m_penColor)
-        self.m_penColorLabel.setAutoFillBackground(True)
-        self.m_penColorLabel.setPalette(palette)
-
     @QtCore.Slot()
     def onPenWidthSliderValueChanged(self):
         width = self.m_penWidthSlider.value()
         self.m_paintWidget.m_penWidth = width
-
-    @QtCore.Slot()
-    def onPenColorLabelClicked(self):
-        color = QtWidgets.QColorDialog.getColor(self.m_paintWidget.m_penColor)
-        if(color.isValid()):
-            self.m_paintWidget.m_penColor = color
-            self.updatePenColorLabel()
         
