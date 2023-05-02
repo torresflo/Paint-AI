@@ -25,11 +25,11 @@ class MainWindow(MainWindowUI):
         self.m_imageGenerator = ImageGenerator()
 
         # Seed
-        self.m_seedSpinBox.setRange(0, self.m_maxRandomNumber)
-        self.m_seedSpinBox.setValue(self.generateRandomNumber())
+        self.m_generationOptionsWidget.m_seedSpinBox.setRange(0, self.m_maxRandomNumber)
+        self.m_generationOptionsWidget.m_seedSpinBox.setValue(self.generateRandomNumber())
 
         # Connections
-        self.m_generateRandomNumberPushButton.clicked.connect(self.onGenerateRandomNumberPushButtonClicked)
+        self.m_generationOptionsWidget.m_generateRandomNumberPushButton.clicked.connect(self.onGenerateRandomNumberPushButtonClicked)
         self.onAnyParameterChangedSignal.connect(self.onAnyParameterChanged)
 
     def generateRandomNumber(self):
@@ -37,7 +37,7 @@ class MainWindow(MainWindowUI):
 
     @QtCore.Slot()
     def onGenerateRandomNumberPushButtonClicked(self):
-        self.m_seedSpinBox.setValue(self.generateRandomNumber())
+        self.m_generationOptionsWidget.m_seedSpinBox.setValue(self.generateRandomNumber())
 
     @QtCore.Slot()
     def onAnyParameterChanged(self):
@@ -57,19 +57,19 @@ class MainWindow(MainWindowUI):
 
     @QtCore.Slot()
     def startImageGeneration(self):
-        promptString = self.m_promptLineEdit.text()
+        promptString = self.m_generationOptionsWidget.m_promptLineEdit.text()
         if promptString:
             self.m_generationInProgress = True
 
-            numInferenceSteps = self.m_numInferenceStepsSpinBox.value()
-            guidanceScale = self.m_guidanceScaleDoubleSpinBox.value()
-            strenght = self.m_strengthSpinBox.value()
+            numInferenceSteps = self.m_generationOptionsWidget.m_numInferenceStepsSpinBox.value()
+            guidanceScale = self.m_generationOptionsWidget.m_guidanceScaleDoubleSpinBox.value()
+            strenght = self.m_generationOptionsWidget.m_strengthSpinBox.value()
 
             seed = self.generateRandomNumber()
-            if self.m_seedGroupBox.isChecked():
-                seed = self.m_seedSpinBox.value()
+            if self.m_generationOptionsWidget.m_seedGroupBox.isChecked():
+                seed = self.m_generationOptionsWidget.m_seedSpinBox.value()
             else:
-                self.m_seedSpinBox.setValue(seed)
+                self.m_generationOptionsWidget.m_seedSpinBox.setValue(seed)
 
             buffer = QtCore.QBuffer()
             buffer.open(QtCore.QBuffer.OpenModeFlag.ReadWrite)
@@ -77,7 +77,7 @@ class MainWindow(MainWindowUI):
             initImage = Image.open(io.BytesIO(buffer.data()))
             buffer.close()
 
-            model = self.m_modelNameComboBox.currentData()
+            model = self.m_generationOptionsWidget.m_modelNameComboBox.currentData()
             
             worker = ImageGeneratorWorker(self.m_imageGenerator, modelName=model, prompt=promptString, image=initImage, 
                                                         numInferenceSteps=numInferenceSteps, guidanceScale=guidanceScale, strength=strenght, seed=seed)
